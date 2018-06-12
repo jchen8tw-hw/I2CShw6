@@ -11,8 +11,8 @@
 #include <algorithm>
 
 using namespace std;
-int cnt = 0;
-double m = 0,v = 0;
+int cnt = 1;
+double m = 0,v = 0,mt = 0,vt = 0;
 double beta1 = 0.9;
 double beta2 = 0.999;
 double eps = 1e-6;
@@ -404,20 +404,19 @@ class neural_network{
     void update_edge(double size){
         map<tuple<int,int>, double>::iterator it;
         for ( it = this->edge_dict.begin(); it != this->edge_dict.end(); it++ ){
-            if(cnt <10){
-            m = beta1*m + (1-beta1)*this->edge_gradient_dict[it->first] / size;
+            m = beta1*m + (1-beta1)*(this->edge_gradient_dict[it->first] / size);
+            mt = m / (1-pow(beta1,cnt));
             v = beta2*v + (1-beta2)*((this->edge_gradient_dict[it->first] / size)*(this->edge_gradient_dict[it->first] / size));
-            //x += - learning_rate * m / (np.sqrt(v) + eps)
-            this->edge_dict[it->first] -= this->learn_rate * this->edge_gradient_dict[it->first] / size;
+            vt =  v/(1-pow(beta2,cnt));
+            this->edge_dict[it->first] -= this->learn_rate *mt / (sqrt(vt)+eps);
             this->edge_gradient_dict[it->first] = 0;
-            }
-            else{
-                m = beta1*m + (1-beta1)*(this->edge_gradient_dict[it->first] / size);
-                v = beta2*v + (1-beta2)*((this->edge_gradient_dict[it->first] / size)*(this->edge_gradient_dict[it->first] / size));
-                this->edge_dict[it->first] -= this->learn_rate *m / (sqrt(v)+eps);
-                this->edge_gradient_dict[it->first] = 0;
-            }
-            
+            /*
+            m = beta1*m + (1-beta1)*dx
+            mt = m / (1-beta1**t)
+            v = beta2*v + (1-beta2)*(dx**2)
+            vt = v / (1-beta2**t)
+            x += - learning_rate * mt / (np.sqrt(vt) + eps)
+            */   
         }
     };
 
