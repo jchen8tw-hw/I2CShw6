@@ -11,7 +11,11 @@
 #include <algorithm>
 
 using namespace std;
-
+int cnt = 0;
+double m = 0,v = 0;
+double beta1 = 0.9;
+double beta2 = 0.999;
+double eps = 1e-6;
 double sigmoid(double x){
     return 1/(1+ exp(-1*x));
 };
@@ -400,8 +404,20 @@ class neural_network{
     void update_edge(double size){
         map<tuple<int,int>, double>::iterator it;
         for ( it = this->edge_dict.begin(); it != this->edge_dict.end(); it++ ){
+            if(cnt <10){
+            m = beta1*m + (1-beta1)*this->edge_gradient_dict[it->first] / size;
+            v = beta2*v + (1-beta2)*((this->edge_gradient_dict[it->first] / size)*(this->edge_gradient_dict[it->first] / size));
+            //x += - learning_rate * m / (np.sqrt(v) + eps)
             this->edge_dict[it->first] -= this->learn_rate * this->edge_gradient_dict[it->first] / size;
             this->edge_gradient_dict[it->first] = 0;
+            }
+            else{
+                m = beta1*m + (1-beta1)*(this->edge_gradient_dict[it->first] / size);
+                v = beta2*v + (1-beta2)*((this->edge_gradient_dict[it->first] / size)*(this->edge_gradient_dict[it->first] / size));
+                this->edge_dict[it->first] -= this->learn_rate *m / (sqrt(v)+eps);
+                this->edge_gradient_dict[it->first] = 0;
+            }
+            
         }
     };
 
@@ -417,6 +433,8 @@ class neural_network{
             this->backPropagation( (*it), this->out_data[counter]);
             if( counter % int(batch_size) == 0){
                 this->update_edge( double(batch_size) );
+                //cnt ++
+                cnt ++;
             }
             
            counter++;
