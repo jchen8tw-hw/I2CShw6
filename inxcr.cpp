@@ -2,7 +2,9 @@
 #include<iostream>
 #include<vector>
 #include<string>
+#include<set>
 using namespace std;
+set<string> added;
 bool valid(string str,int xpos){
 	str[xpos] = 'b';
 	string mapstr;
@@ -15,7 +17,14 @@ bool valid(string str,int xpos){
 	}
 	if(mapstr[0]==mapstr[4]&&mapstr[4]==mapstr[8]&&mapstr[0]!='b') return false;
 	if(mapstr[2]==mapstr[4]&&mapstr[4]==mapstr[6]&&mapstr[2]!='b') return false;
-	return true;
+	if(added.find(mapstr) == added.end()){
+		added.insert(mapstr);
+		return true;	
+	}
+	else{
+		return false;
+	}
+	
 }
 int main(){
 	ifstream in("data.txt");
