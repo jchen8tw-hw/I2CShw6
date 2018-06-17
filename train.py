@@ -13,7 +13,7 @@ import numpy as np
 from torch.autograd import Variable
 
 torch.manual_seed(1)    # reproducible
-BATCH_SIZE = 2170
+BATCH_SIZE = 1970
 #x = torch.unsqueeze(torch.linspace(-1, 1, 100), dim=1)  # x data (tensor), shape=(100, 1)
 #y = x.pow(2) + 0.2*torch.rand(x.size())                 # noisy y data (tensor), shape=(100, 1)
 
@@ -62,23 +62,25 @@ except Exception as e:
     print(net)  # net architecture
 
 optimizer = torch.optim.Adam(net.parameters(), lr=0.01,betas=(0.9, 0.99))
-loss_func = torch.nn.CrossEntropyLoss()
-#loss_func = torch.nn.MSELoss()  # this is for regression mean squared loss
+#loss_func = torch.nn.CrossEntropyLoss()
+loss_func = torch.nn.MSELoss()  # this is for regression mean squared loss
 #print(torch.max(y,1))
-for epoch in range(20000):   # train entire dataset 3 times
+for epoch in range(10000):   # train entire dataset 3 times
     for step, (batch_x, batch_y) in enumerate(loader):  # for each training step
         # train your data...
         batch_x = Variable(batch_x)
         batch_y = Variable(batch_y)
         prediction = net(batch_x)
-#        loss = loss_func(prediction,batch_y) #MSE
-        loss = loss_func(prediction,torch.max(batch_y,1)[1]) #crossentropy
+        loss = loss_func(prediction,batch_y) #MSE
+#        loss = loss_func(prediction,torch.max(batch_y,1)[1]) #crossentropy
         optimizer.zero_grad()   # clear gradients for next train
         loss.backward()         # backpropagation, compute gradients
         optimizer.step()        # apply gradients
+        print('Epoch: ', epoch,'| loss: ',loss.detach().numpy())
+        """
         print('Epoch: ', epoch, '| Step: ', step, '| batch x: ',
         batch_x.detach().numpy(), '| batch y: ', batch_y.detach().numpy(),'| loss: ',loss.detach().numpy())
-        
+        """
 torch.save(net.state_dict(), 'net.pkl')
 
 

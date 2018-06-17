@@ -46,13 +46,13 @@ try:
 	for i in range(36+18,36+18*2):
 		for j in range(36+18*2,36+18*3):
 			f.write('{} {} {}\n'.format(i,j,str(weights[j-36-18*2][i-36-18])))
-			f.write('{} {} {}\n'.format(i,j,str(bias[j-36-18*2])))
+			f.write('{} {} {}\n'.format(j,j,str(bias[j-36-18*2])))
 	weights = list(net.predict.parameters())[0].detach().numpy()
 	bias = list(net.predict.parameters())[1].detach().numpy()
 	for i in  range(36+18*2,36+18*3):
 		for j in range(27,36):
 			f.write('{} {} {}\n'.format(i,j,str(weights[j-27][i-36-18*2])))
-			f.write('{} {} {}\n'.format(i,j,str(bias[j-27])))
+			f.write('{} {} {}\n'.format(j,j,str(bias[j-27])))
 #	print(list(net.hidden2.parameters())[1].detach().numpy())
 except Exception as e:
 	raise e

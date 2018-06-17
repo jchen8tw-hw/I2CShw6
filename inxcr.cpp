@@ -26,6 +26,19 @@ bool valid(string str,int xpos){
 	}
 	
 }
+bool circlewin(string str){
+	string mapstr;
+	for(int i = 0;i<18;i++){
+		if(str[i] != ',')mapstr += str[i];
+	}
+	for(int i = 0;i<3;i++){
+		if(mapstr[i*3]== mapstr[i*3+1] && mapstr[i*3+1] == mapstr[i*3+2]&&mapstr[i*3]=='o') return true;
+		if(mapstr[i]== mapstr[i+3]&&mapstr[i+3]==mapstr[i+6]&&mapstr[i] =='o') return true;
+	}
+	if(mapstr[0]==mapstr[4]&&mapstr[4]==mapstr[8]&&mapstr[0]=='o') return true;
+	if(mapstr[2]==mapstr[4]&&mapstr[4]==mapstr[6]&&mapstr[2]=='o') return true;
+	return false;
+}
 int main(){
 	ifstream in("data.txt");
 	string tmp;
@@ -83,7 +96,7 @@ int main(){
 	//negative
 	for(int i = 626;i<958;i++){
 		for(int j = 0;j<18;j++){
-			if(maps[i][j] == 'o'){
+			if(maps[i][j] == 'o'&&circlewin(maps[i])){
 				string newstr = maps[i];
 				if(valid(newstr,j)) newstr[j] = 'b';
 				else continue;
@@ -125,8 +138,6 @@ int main(){
 						outx << endl;
 					}
 				}
-				
-				
 			}
 			else continue;
 		}
