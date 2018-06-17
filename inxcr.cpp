@@ -85,10 +85,48 @@ int main(){
 		for(int j = 0;j<18;j++){
 			if(maps[i][j] == 'o'){
 				string newstr = maps[i];
-				if(valid(newstr,j)) newstr[i][j] = 'b';
+				if(valid(newstr,j)) newstr[j] = 'b';
+				else continue;
 				for(int k = 0;k<18;k++){
-					if(map[i][k] == 'x'&&valid(newstr,k))
+					if(maps[i][k] == 'x'&&valid(newstr,k)){
+						for(int l = 0;l<9;l++){
+							if(l== j/2){
+								outy << "1.0";
+							}
+							else{
+								outy << "0.0";
+							}
+							if(l!=8) outy << " ";
+						}
+						cnty++;
+						outy << endl;
+						for(int m = 0;m<18;m++){
+							if(m == j||m==k){
+								if(m != 0) outx << " ";
+								outx << "1 0 0";
+							}
+							else if(maps[i][m]== ',') continue;
+							else{
+								if(maps[i][m] == 'x'){
+									if(m != 0) outx << " ";
+									outx << "0 1 0";
+								}
+								else if(maps[i][m] == 'o'){
+									if(m != 0) outx << " ";
+									outx << "0 0 1";
+								}
+								else if(maps[i][m] == 'b'){
+									if(m != 0) outx << " ";
+									outx << "1 0 0";
+								}
+							}
+						}
+						cnt++;
+						outx << endl;
+					}
 				}
+				
+				
 			}
 			else continue;
 		}
