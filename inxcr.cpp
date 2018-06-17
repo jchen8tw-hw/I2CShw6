@@ -80,6 +80,19 @@ int main(){
 			else continue;
 		}
 	}
+	//negative
+	for(int i = 626;i<958;i++){
+		for(int j = 0;j<18;j++){
+			if(maps[i][j] == 'o'){
+				string newstr = maps[i];
+				if(valid(newstr,j)) newstr[i][j] = 'b';
+				for(int k = 0;k<18;k++){
+					if(map[i][k] == 'x'&&valid(newstr,k))
+				}
+			}
+			else continue;
+		}
+	}
 	cout << cnt << endl;
 	cout << cnty << endl;
 	outx.close();
